@@ -1,9 +1,9 @@
 /* eslint-env node */
 
-import {chrome} from '../../.electron-vendors.cache.json';
-import {join} from 'path';
-import {builtinModules} from 'module';
-import vue from '@vitejs/plugin-vue';
+import { chrome } from '../../.electron-vendors.cache.json';
+import { join } from 'path';
+import { builtinModules } from 'module';
+import react from '@vitejs/plugin-react';
 
 const PACKAGE_ROOT = __dirname;
 
@@ -19,7 +19,12 @@ const config = {
       '/@/': join(PACKAGE_ROOT, 'src') + '/',
     },
   },
-  plugins: [vue()],
+  esbuild: {
+    loader: 'tsx',
+    include: [/(src|react-native-.*)\/.*\.[tj]sx?$/],
+    exclude: [],
+  },
+  plugins: [react()],
   base: '',
   server: {
     fs: {
@@ -32,9 +37,7 @@ const config = {
     outDir: 'dist',
     assetsDir: '.',
     rollupOptions: {
-      external: [
-        ...builtinModules,
-      ],
+      external: [...builtinModules],
     },
     emptyOutDir: true,
     brotliSize: false,
